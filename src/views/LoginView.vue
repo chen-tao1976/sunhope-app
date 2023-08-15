@@ -1,5 +1,5 @@
 <template>
-   <div class="min-h-screen flex items-center justify-center">
+    <div class="min-h-screen flex items-center justify-center">
         <el-card class="flex justify-center w-[300px]">
             <el-form ref="loginFormRef" :model="loginForm" :rules="rules" class="w-[250px]" >
                 <el-form-item prop="username">
@@ -25,8 +25,13 @@
 </template>
 
 <script setup>
-  import {ref, reactive } from 'vue'
-  const loginForm = reactive({username:'admin',password:'admin' })
+    import {ref, reactive } from 'vue'
+    import { useRouter } from 'vue-router'
+    import { useUserStore } from '@/stores/user'
+    const router = useRouter()
+
+    // do not use same name with ref
+    const loginForm = reactive({username:'admin',password:'admin' })
     const loginFormRef = ref(null)
     const loading = ref(false)
 
@@ -38,12 +43,22 @@
             { required: true, message: '密码不能为空', trigger: 'blur' }
         ]
     }
-    function handleLogin(params) {
-        
+   
+    const userStore = useUserStore()
+    const handleLogin = () => {
+        loginFormRef.value.validate((valid)=>{
+            if(!valid){
+                return false
+            }
+            loading.value = true
+            userStore.login(loginForm).then(()=>{           
+                router.push("/")
+            }).finally(()=>{
+                loading.value = false           
+            })            
+        })       
     }
+    //enter login
 
 </script>
 
-<style lang="scss" scoped>
-
-</style>
