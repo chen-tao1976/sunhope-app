@@ -26,6 +26,12 @@
 
 <script setup>
   import {ref, reactive } from 'vue'
+  import { useRouter } from 'vue-router'
+  import { useUserStore } from '@/stores/user'
+  
+  const router = useRouter()
+  const userStore = useUserStore()
+
   const loginForm = reactive({username:'admin',password:'admin' })
     const loginFormRef = ref(null)
     const loading = ref(false)
@@ -38,8 +44,18 @@
             { required: true, message: '密码不能为空', trigger: 'blur' }
         ]
     }
-    function handleLogin(params) {
-        
+    function handleLogin() {
+        loginFormRef.value.validate((valid)=>{
+            if(!valid){
+                return false
+            }
+            loading.value = true
+            userStore.login(loginForm).then(()=>{           
+                router.push("/")
+            }).finally(()=>{
+                loading.value = false           
+            })            
+        })       
     }
 
 </script>
