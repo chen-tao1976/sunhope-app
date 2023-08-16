@@ -2,7 +2,7 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
 import { loginApi, getInfoApi } from '@/api/login'
-import { setToken } from '@/utils/auth'
+import { setToken,removeToken } from '@/utils/auth'
 
 
 export const useUserStore = defineStore('user', () => {
@@ -24,5 +24,13 @@ export const useUserStore = defineStore('user', () => {
     userInfo.value = res.data
   }
 
-  return { userInfo, login, getUserInfo }
+  const logout = ()=>{
+    //清除cooke
+    removeToken()
+    //清除userInfo
+    userInfo.value = {}
+
+  }
+
+  return { userInfo, login,logout, getUserInfo }
 })

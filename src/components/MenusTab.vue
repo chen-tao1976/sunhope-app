@@ -25,7 +25,5 @@ const asideMenus = [{
 </script>
 
 <style lang="scss" scoped>
-a.router-link-exact-active {
-  color:green;
-}
+
 </style>

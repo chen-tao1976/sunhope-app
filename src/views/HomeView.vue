@@ -19,16 +19,16 @@
 </template>
 
 <script setup>
-import { useUserStore } from '@/stores/user'
-import MenusTab from '@/components/MenusTab.vue'
-import UsersTab from '@/components/UsersTab.vue'
-import { ref } from 'vue'
+  import { useUserStore } from '@/stores/user'
+  import MenusTab from '@/components/MenusTab.vue'
+  import UsersTab from '@/components/UsersTab.vue'
+  import { ref } from 'vue'
 
-const userStore = useUserStore()
-const activeName = ref('first')
+  const userStore = useUserStore()
+  const activeName = ref('first')
 
-const handleClick = (tab, event) => {
-  console.log(tab, event)
-}
+  const handleClick = (tab, event) => {
+    console.log(tab, event)
+  }
 
 </script>
