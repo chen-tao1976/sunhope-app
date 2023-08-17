@@ -2,11 +2,14 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
 import { loginApi, getInfoApi } from '@/api/login'
-import { setToken,removeToken } from '@/utils/auth'
+import { setToken, removeToken } from '@/utils/auth'
 
 
 export const useUserStore = defineStore('user', () => {
   const userInfo = ref({})
+  const menus = ref([])
+  const roles = ref([])
+
 
   const login = ({ username, password }) => {
     return new Promise((resolve, reject) => {
@@ -21,10 +24,12 @@ export const useUserStore = defineStore('user', () => {
 
   const getUserInfo = async () => {
     const res = await getInfoApi()
+    console.log(res);
     userInfo.value = res.data
+    menus.value = res.data.menus
   }
 
-  const logout = ()=>{
+  const logout = () => {
     //清除cooke
     removeToken()
     //清除userInfo
@@ -32,5 +37,5 @@ export const useUserStore = defineStore('user', () => {
 
   }
 
-  return { userInfo, login,logout, getUserInfo }
+  return { userInfo,menus, login, logout, getUserInfo }
 })

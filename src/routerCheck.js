@@ -21,6 +21,7 @@ router.beforeEach(async (to, from, next) => {
     if (token) {
         const userStroe = useUserStore()
         userStroe.getUserInfo()
+        
     }
 
     next()

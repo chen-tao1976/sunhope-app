@@ -1,29 +1,59 @@
 <template>
-    <div class="flex flex-col items-center">
-        <router-link target="_blank" to="/task" >任务管理</router-link>
-        <router-link target="_blank" to="/mail" >邮件管理</router-link>
-        <router-link target="_blank" to="/case" >案卷管理</router-link>
-        <router-link target="_blank" to="/hr" >人事管理</router-link>
-        <router-link target="_blank" to="/system" >系统管理</router-link>
+    <div class="f-menu bg-light-50">
+        <el-menu :default-active="defaultActiv" class="border-0" @select="handleMuSelect">
+            <template v-for="(item, index) in asideMenus" :key="index">
+
+                <el-sub-menu v-if="item.child && item.child.length > 0" :index="item.name">
+                    <template #title>
+                        <el-icon>
+                            <component :is="item.icon"></component>
+                        </el-icon>
+                        <span>{{ item.name }}</span>
+                    </template>
+                    <el-menu-item v-for="(item2, index2) in item.child" :key="index2" :index="item2.frontpath">
+                        <el-icon>
+                            <component :is="item2.icon"></component>
+                        </el-icon>
+                        <span>{{ item2.name }}</span>
+                    </el-menu-item>
+                </el-sub-menu>
+
+                <el-menu-item v-else :index="item.frontpath">
+                    <el-icon>
+                        <component :is="item.icon"></component>
+                    </el-icon>
+                    <span>{{ item.name }}</span>
+                </el-menu-item>
+            </template>
+
+
+        </el-menu>
     </div>
 </template>
 
 <script setup>
-const asideMenus = [{
-    "name": "后台面板",
-    "icon": "help",
-    "child": [
-        { "name": "主控台", "icon": "home-filled", "frontpath": "/" }
-    ]
-}, {
-    "name": "商城管理",
-    "icon": "shopping-bag",
-    "child": [
-        { "name": "商品管理", "icon": "home-filled", "frontpath": "/" }
-    ]
-}]
+import { useRouter, useRoute } from 'vue-router'
+import { ref,computed } from 'vue'
+import { useUserStore } from '@/stores/user'
+
+const router = useRouter()
+const route = useRoute()
+const userStore = useUserStore()
+
+
+const defaultActiv = ref(route.path)
+
+const asideMenus = computed(() => userStore.menus)
+
+const handleMuSelect = (e) => {
+    const href = router.resolve({ path: e })
+    window.open(href.href, '_blank')
+}
 </script>
 
-<style lang="scss" scoped>
+<style >
+.f-menu {
+    overflow: auto;
 
+}
 </style>
